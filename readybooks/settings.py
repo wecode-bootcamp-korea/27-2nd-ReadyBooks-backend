@@ -82,11 +82,11 @@ WSGI_APPLICATION = 'readybooks.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE'  : 'django.db.backends.mysql', 
-		'NAME'    : os.environ["NAME"], 
-		'USER'    : os.environ["USER"], 
-		'PASSWORD': os.environ["PASSWORD"], 
-		'HOST'    : '127.0.0.1', 
-		'PORT'    : '3306', 
+        'NAME'    : os.environ["NAME"], 
+        'USER'    : os.environ["USER"], 
+        'PASSWORD': os.environ["PASSWORD"], 
+        'HOST'    : '127.0.0.1', 
+        'PORT'    : '3306', 
         'OPTIONS' : {'charset': 'utf8mb4'} 
     }
 }
