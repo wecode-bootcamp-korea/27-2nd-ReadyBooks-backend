@@ -33,6 +33,7 @@ APPEND_SLASH  = False
 
 # Application definition
 
+
 INSTALLED_APPS = [
     # 'django.contrib.admin',
     # 'django.contrib.auth',
@@ -41,7 +42,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'corsheaders',
-    'django_extensions'
+    'django_extensions',
+    'books',
+    'carts',
+    'orders',
+    'users',
 ]
 
 MIDDLEWARE = [
