@@ -1,6 +1,6 @@
 from django.db    import models
 
-from utils        import Timer
+from core.utils   import Timer
 from users.models import User
 
 class Book(Timer):
@@ -8,7 +8,7 @@ class Book(Timer):
     price         = models.DecimalField(max_digits=10, decimal_places=2)
     preview_file  = models.URLField(max_length=1000)
     file          = models.URLField(max_length=1000)
-    discrption    = models.TextField(max_length=2000)
+    description   = models.TextField(max_length=2000)
     thumbnail     = models.URLField(max_length=1000)
 
     class Meta:

@@ -1,7 +1,6 @@
 from django.db import models
 
-from utils     import Timer
-
+from core.utils     import Timer
 
 class User(Timer):
     kakao_id    = models.IntegerField()
