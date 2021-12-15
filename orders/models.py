@@ -2,6 +2,7 @@ from django.db import models
 
 from books.models import Book
 from users.models import User
+
 from core.utils   import Timer
 
 class Order(Timer):
