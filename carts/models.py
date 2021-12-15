@@ -2,7 +2,7 @@ from django.db import models
 
 from users.models import User
 from books.models import Book
-from utils        import Timer
+from core.utils   import Timer
 
 
 class Cart(Timer):
