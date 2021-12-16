@@ -43,6 +43,7 @@ class BooksView(View):
         books = Book.objects.annotate(review_avg = Avg('review__rating')).prefetch_related('authorbook_set__author').order_by(ordering)[offset:limit+offset]
 
         book_list=[{
+            'book_id'    : book.id,
             "title"      : book.name,
             "thumbnail"  : book.thumbnail,
             "review_avg" : book.review_avg,
