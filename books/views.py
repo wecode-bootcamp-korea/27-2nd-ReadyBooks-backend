@@ -28,3 +28,21 @@ class BookView(View):
 
         except Book.DoesNotExist:
             JsonResponse({"message" : "DOES_NOT_EXIST"}, status=401)
+
+class BooksView(View):
+    @login_required
+    def get(self, request):
+        limit    = int(request.GET.get('limit', 50))
+        offset   = int(request.GET.get('offset', 0))
+        ordering = request.GET.get('ordering', 'created_at')
+
+        books = Book.objects.annotate(review_avg = Avg('review__id')).prefetch_related('authorbook_set__author').order_by(ordering)[offset:limit+offset]
+
+        book_list=[{
+            "title"      : book.name,
+            "thumbnail"  : book.thumbnail,
+            "review_avg" : book.review_avg,
+            "authors"    : [author.author.name for author in book.authorbook_set.all()]
+        } for book in books]
+
+        return JsonResponse({'result' : book_list}, status = 200)

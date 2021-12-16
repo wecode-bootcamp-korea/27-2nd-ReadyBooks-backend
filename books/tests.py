@@ -1,4 +1,5 @@
 from datetime       import datetime
+from django.utils import timezone
 from django.test    import TestCase, Client
 
 from books.models   import AuthorBook, Book, Author, Review
@@ -79,7 +80,6 @@ class BookViewTest(TestCase):
             order = Order.objects.get(id=1),
             book  = Book.objects.get(id=1)
         )
-
     def tearDown(self):
         Book.objects.all().delete()
         Author.objects.all().delete()
@@ -106,5 +106,66 @@ class BookViewTest(TestCase):
                         "작가1"
                     ],
                 }
-            
+        })
+
+class BooksViewTest(TestCase):
+    def setUp(self):
+        self.now = timezone.now()
+        self.client = Client()
+        
+        User.objects.create(
+            id          = 1,
+            kakao_id    = '11',
+            nickname    = '현대영작가',
+            profile_img = 'image'
+        )
+        
+        Book.objects.create(id = 2,name = '해리포터',price = 12300,preview_file = 'image', \
+                                 file = 'images',description = '20주년',thumbnail = 'images')
+        
+        Author.objects.create(id = 1,name = '현대영작가')
+        
+        AuthorBook.objects.create(id = 1,author = Author.objects.get(id=1),book = Book.objects.get(id=2))
+        
+        Review.objects.create(user_id  = 1,book_id  = 2,rating = 4.6)
+        
+
+          
+    def tearDown(self):
+        User.objects.all().delete()
+        Book.objects.all().delete()
+        Author.objects.all().delete()
+        AuthorBook.objects.all().delete()
+        Review.objects.all().delete()
+
+    def test_success_get_books(self):
+        response = self.client.get('/books/main')
+
+        self.assertEqual(response.status_code,200)
+        self.assertEqual(response.json(), {
+            "result" : [
+                {
+                    "title"      : "해리포터",
+                    "thumbnail"  : "images",
+                    "review_avg" : 1.0,
+                    "authors"    : ["현대영작가"]
+                }
+            ]
+        })
+
+
+    
+    def test_success_get_books_offset_and_limit(self):
+        response = self.client.get('/books/main?limit=12&offset=0')
+
+        self.assertEqual(response.status_code,200)
+        self.assertEqual(response.json(), {
+            "result" : [
+                {
+                    "title"      : "해리포터",
+                    "thumbnail"  : "images",
+                    "review_avg" : 2.0,
+                    "authors"    : ["현대영작가"]
+                }
+            ]
         })
