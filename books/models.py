@@ -47,10 +47,11 @@ class Author(models.Model):
         return self.name
 
 class Review(Timer):
-    user          = models.ForeignKey(User, on_delete=models.CASCADE)
-    book          = models.ForeignKey("Book", on_delete=models.CASCADE)
-    rating        = models.DecimalField(max_digits=10, decimal_places=2)
-    content       = models.TextField(max_length=1000)
+    user     = models.ForeignKey(User, on_delete=models.CASCADE)
+    book     = models.ForeignKey("Book", on_delete=models.CASCADE)
+    nickname = models.CharField(max_length=500)
+    rating   = models.DecimalField(max_digits=10, decimal_places=2)
+    content  = models.TextField(max_length=1000)
 
     class Meta:
         db_table = "reviews"
