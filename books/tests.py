@@ -1,12 +1,13 @@
 import json, jwt
 
-from datetime       import datetime
-from django.utils import timezone
-from django.test    import TestCase, Client
+from datetime            import datetime
+from django.test         import TestCase, Client
 
-from books.models   import AuthorBook, Book, Author, Review
-from users.models   import User
-from orders.models  import Order, OrderItem
+from books.models        import AuthorBook, Book, Author, Review
+from users.models        import User
+from orders.models       import Order, OrderItem
+
+from readybooks.settings import SECRET_KEY, ALGORITHM
 
 from readybooks.settings import SECRET_KEY, ALGORITHM
 
@@ -116,7 +117,7 @@ class BookViewTest(TestCase):
 
 class BooksViewTest(TestCase):
     def setUp(self):
-        self.now = timezone.now()
+
         self.client = Client()
         
         User.objects.create(
@@ -153,7 +154,7 @@ class BooksViewTest(TestCase):
                 {
                     "title"      : "해리포터",
                     "thumbnail"  : "images",
-                    "review_avg" : '4.600000',
+                    "review_avg" : 2.0,
                     "authors"    : ["현대영작가"]
                 }
             ]
@@ -170,18 +171,17 @@ class BooksViewTest(TestCase):
                 {
                     "title"      : "해리포터",
                     "thumbnail"  : "images",
-                    "review_avg" : '4.600000',
+                    "review_avg" : 3.0,
                     "authors"    : ["현대영작가"]
                 }
             ]
         })
 
-class ReViewPostTest(TestCase):
-    maxDiff = None
-    
-    def setUp(self):
-        self.client = Client()
 
+            
+
+class ReViewPostTest(TestCase):
+    def setUp(self):
         Book.objects.create(
             id=1,
             name="책1",
@@ -227,3 +227,33 @@ class ReViewPostTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
 
+class DelReViewTest(TestCase):
+        Book.objects.create(
+                id=1,
+                name="책1",
+                price=10000,
+                preview_file="url",
+                file="url",
+                description="설명1",
+                thumbnail="thumbnail1"
+            )
+        User.objects.create(
+                    id=1,
+                    kakao_id=1,
+                    nickname=1,
+                    profile_img = 1
+            )
+            
+        Review.objects.create(
+                    id=1,
+                    user=User.objects.get(id=1), 
+                    book=Book.objects.get(id=1),
+                    rating=5,content="content1"), 
+
+        self.token = jwt.encode({'id':1}, SECRET_KEY, ALGORITHM)
+    
+        def test_success_book_view_review_list_view_delete_method(self):
+            headers = {"HTTP_Authorization" : self.token}
+
+            response = self.client.delete('/books/review/1', **headers)
+            self.assertEqual(response.status_code, 204)
