@@ -30,6 +30,7 @@ class SignInTest(TestCase):
         token               = jwt.encode({"id" : 1}, os.environ["SECRET_KEY"], os.environ["ALGORITHM"])
 
         self.assertEqual(response.status_code, 200)
+        
         self.assertEqual(response.json(), {
             'Authorization': token,
             'user_id': 1,
