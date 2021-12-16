@@ -53,13 +53,13 @@ class BooksView(View):
 
 class ReviewView(View):
     @login_required
-    def post(self, request, book_id):
+    def post(self, request):
         try:
             data = json.loads(request.body)
 
             Review.objects.create(
                 user     = request.user,
-                book_id  = book_id,
+                book_id  = data['book_id'],
                 nickname = data['nickname'],
                 rating   = data['rating'],
                 content  = data['content']
@@ -69,12 +69,13 @@ class ReviewView(View):
         except KeyError:
             JsonResponse({"message" : "KEY_ERROR"}, status=400)
 
-    def get(self, request, book_id):
-        results =[]
-
+    def get(self, request):
+        book = request.GET.get("book_id", None)
+        results = []
+        
         results.append({
-            "book_id"        : book_id,
-            "average"        : Review.objects.filter(book_id=book_id).aggregate(avg_rating=Avg('rating')),
+            "book_id"        : book,
+            "average"        : Review.objects.filter(book_id=book).aggregate(avg_rating=Avg('rating')),
             "review"         :
             [{
                 "review_id"  : review.id,
@@ -83,6 +84,11 @@ class ReviewView(View):
                 "rating"     : review.rating,
                 "content"    : review.content,
                 "created_at" : review.created_at.strftime("%Y-%m-%d %H:%M:%S")
-            } for review in Review.objects.filter(book_id= book_id)]
+            } for review in Review.objects.filter(book_id= book)]
         })
         return JsonResponse({"result" : results}, status=200)
+
+    @login_required
+    def delete(self, request, review_id):
+        Review.objects.filter(user=request.user, id=review_id).delete()
+        return JsonResponse({"message" : "NO CONTENT"}, status=204)
