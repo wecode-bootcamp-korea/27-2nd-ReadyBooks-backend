@@ -100,22 +100,22 @@ class OrderBookTest(TestCase):
         response = client.get('/orders/orderitems')
         print(response.json())
         self.assertEqual(response.json(),{"result":[
-            # {
-            # "order_id"   : 2,
-            # "order_book" : {
-            #     "id"          : 2,
-            #     "title"        : "해리포터",
-            #     "thumbnail"   : "img.jpg",
-            #     "author" : ["강아지","고양이"]
-            #     }
-            # },{
-            # "order_id"   : 1,
-            # "order_book" : {
-            #     "id"          : 1,
-            #     "title"        : "홍길동전",
-            #     "thumbnail"   : "img.jpg",
-            #     "author" : ["강아지","고양이"]
-            # }}
+            {
+            "order_id"   : 2,
+            "order_book" : {
+                "id"          : 2,
+                "title"        : "해리포터",
+                "thumbnail"   : "img.jpg",
+                "author" : ["강아지","고양이"]
+                }
+            },{
+            "order_id"   : 1,
+            "order_book" : {
+                "id"          : 1,
+                "title"        : "홍길동전",
+                "thumbnail"   : "img.jpg",
+                "author" : ["강아지","고양이"]
+            }}
             ]})
         self.assertEqual(response.status_code, 200)
 
@@ -183,9 +183,7 @@ class OrderTest(TestCase):
                 book = Book.objects.get(id=2)
             )]
         Cart.objects.bulk_create(bulk_cart)
-
-
-
+        
         self.token = jwt.encode({'id':1}, SECRET_KEY, ALGORITHM)
     
     def tearDown(self):
@@ -207,6 +205,3 @@ class OrderTest(TestCase):
             'message': 123
         })
         self.assertEqual(response.status_code, 200)
-
-
-        

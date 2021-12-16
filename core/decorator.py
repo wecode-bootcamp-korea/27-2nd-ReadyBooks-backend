@@ -8,12 +8,6 @@ def login_required(func):
     def wrapper(self, request, *args, **kwargs):
         try:
             token = request.headers.get("Authorization",None)
-            
-            if token is None:
-                request.user = None
-
-                return func(self, request, *args, **kwargs)
-
             payload      = jwt.decode(token, os.environ["SECRET_KEY"], algorithms=os.environ["ALGORITHM"])
             request.user = User.objects.get(id = payload["id"])
 

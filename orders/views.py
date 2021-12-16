@@ -7,10 +7,10 @@ from django.db      import transaction
 
 from orders.models  import OrderItem, Order
 from carts.models   import Cart
-from core.decorator import login_required
+from core.decorator import login_required, public_authorization
 
 class OrderItemView(View):
-    @login_required
+    @public_authorization
     def get(self, request):
         items = OrderItem.objects.filter(order__user=request.user).prefetch_related("book__authorbook_set__author").order_by("-created_at")[0:10]
         result = [{
@@ -43,7 +43,7 @@ class OrderView(View):
             
             OrderItem.objects.bulk_create(order_items)
             
-            Cart.objects.filter(id__in=books).delete()
+            Cart.objects.filter(book_id__in=books).delete()
 
             return JsonResponse({'message':order.order_number}, status=201)
         
