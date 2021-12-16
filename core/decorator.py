@@ -7,9 +7,10 @@ from users.models import User
 def login_required(func):
     def wrapper(self, request, *args, **kwargs):
         try:
-            token        = request.headers.get("Authorization",None)
-            if token == None:
-                request.user = token
+            token = request.headers.get("Authorization",None)
+            
+            if token is None:
+                request.user = None
 
                 return func(self, request, *args, **kwargs)
 
