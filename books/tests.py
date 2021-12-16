@@ -1,3 +1,5 @@
+import json, jwt
+
 from datetime       import datetime
 from django.utils import timezone
 from django.test    import TestCase, Client
@@ -5,6 +7,8 @@ from django.test    import TestCase, Client
 from books.models   import AuthorBook, Book, Author, Review
 from users.models   import User
 from orders.models  import Order, OrderItem
+
+from readybooks.settings import SECRET_KEY, ALGORITHM
 
 class BookViewTest(TestCase):
     maxDiff = None
@@ -171,3 +175,55 @@ class BooksViewTest(TestCase):
                 }
             ]
         })
+
+class ReViewPostTest(TestCase):
+    maxDiff = None
+    
+    def setUp(self):
+        self.client = Client()
+
+        Book.objects.create(
+            id=1,
+            name="책1",
+            price=10000,
+            preview_file="url",
+            file="url",
+            description="설명1",
+            thumbnail="thumbnail1"
+        )
+
+        User.objects.create(
+            id=1,
+            kakao_id=1,
+            nickname="닉1",
+            profile_img = "img1"
+        )
+
+        self.token = jwt.encode({'id':1}, SECRET_KEY, ALGORITHM)
+        
+
+    def tearDown(self):
+        Book.objects.all().delete()
+        User.objects.all().delete() 
+    
+
+    def test_success_review_view_post_method(self):
+        client = Client()
+
+        headers = {"HTTP_Authorization" : self.token}
+
+        review = {
+            "nickname" : 'Q',
+            "rating"   : 4,
+            "content"  : '123'
+        }
+
+        response = client.post('/books/review/1', json.dumps(review), content_type='application/json', **headers)
+        
+        self.assertEqual(response.json(), {
+            'message': 'SUCCESSS'
+        })
+
+        self.assertEqual(response.status_code, 200)
+
+

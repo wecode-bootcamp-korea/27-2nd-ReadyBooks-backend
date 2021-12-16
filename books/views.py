@@ -1,10 +1,11 @@
+import json
 from django.views           import View
 
 from django.http.response   import JsonResponse
 from django.db.models.query import Prefetch
 from django.db.models       import Avg 
 
-from .models                import Book
+from .models                import Book, Review
 from orders.models          import OrderItem
 from core.decorator         import login_required, public_authorization
 
@@ -48,3 +49,23 @@ class BooksView(View):
         } for book in books]
 
         return JsonResponse({'result' : book_list}, status = 200)
+
+class ReviewView(View):
+    @login_required
+    def post(self, request, book_id):
+        try:
+            data = json.loads(request.body)
+
+            Review.objects.create(
+                user     = request.user,
+                book_id  = book_id,
+                nickname = data['nickname'],
+                rating   = data['rating'],
+                content  = data['content']
+            )
+            return JsonResponse({"message":"SUCCESSS"}, status=200)
+
+        except KeyError:
+            JsonResponse({"message" : "KEY_ERROR"}, status=400)
+
+
