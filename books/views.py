@@ -32,6 +32,7 @@ class BookView(View):
         except Book.DoesNotExist:
             JsonResponse({"message" : "DOES_NOT_EXIST"}, status=401)
 
+
 class BooksView(View):
     @login_required
     def get(self, request):
@@ -68,4 +69,20 @@ class ReviewView(View):
         except KeyError:
             JsonResponse({"message" : "KEY_ERROR"}, status=400)
 
+    def get(self, request, book_id):
+        results =[]
 
+        results.append({
+            "book_id"        : book_id,
+            "average"        : Review.objects.filter(book_id=book_id).aggregate(avg_rating=Avg('rating')),
+            "review"         :
+            [{
+                "review_id"  : review.id,
+                "user_id"    : review.user_id,
+                "nickname"   : review.nickname,
+                "rating"     : review.rating,
+                "content"    : review.content,
+                "created_at" : review.created_at.strftime("%Y-%m-%d %H:%M:%S")
+            } for review in Review.objects.filter(book_id= book_id)]
+        })
+        return JsonResponse({"result" : results}, status=200)
