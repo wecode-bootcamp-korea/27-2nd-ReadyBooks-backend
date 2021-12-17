@@ -22,5 +22,25 @@ def login_required(func):
             return JsonResponse({"message":"INVALID_USER"}, status = 404 )
         except jwt.DecodeError:
             return JsonResponse({"message":"INVALID_TOKEN"}, status = 400 )
+              
+    return wrapper
+
+def public_authorization(func):
+    def wrapper(self, request, *args, **kwargs):
+        try:
+            if request.headers.get("Authorization",None) == None:   
+               request.user=None
+
+               return func(self, request, *args, **kwargs)
+
+            token        = request.headers["Authorization"]
+            payload      = jwt.decode(token, os.environ["SECRET_KEY"], algorithms=os.environ["ALGORITHM"])
+            request.user = User.objects.get(id = payload["id"])
+
+            return func(self, request, *args, **kwargs)
+        except User.DoesNotExist:
+            return JsonResponse({"message":"INVALID_USER"}, status = 404 )
+        except jwt.DecodeError:
+            return JsonResponse({"message":"INVALID_TOKEN"}, status = 400 )
             
     return wrapper
