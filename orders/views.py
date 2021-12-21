@@ -1,7 +1,12 @@
-from django.views import View
-from django.http  import JsonResponse
+import json, uuid
 
-from orders.models  import OrderItem
+from django.views   import View
+from django.http    import JsonResponse
+
+from django.db      import transaction
+
+from orders.models  import OrderItem, Order
+from carts.models   import Cart
 from core.decorator import login_required
 
 class OrderItemView(View):
@@ -18,3 +23,32 @@ class OrderItemView(View):
         } for item in items]
 
         return JsonResponse({"result":result}, status=200 )
+
+class OrderView(View):
+    @login_required
+    def post(self, request):
+        data = json.loads(request.body)
+        user = request.user
+        books = data['cart_id']
+        try:
+            with transaction.atomic():
+                order = Order.objects.create(
+                    user = user,
+                    order_number = uuid.uuid4()
+                )
+                order_items = [OrderItem(
+                    order   = order,
+                    book_id = book
+                )for book in books]
+            
+            OrderItem.objects.bulk_create(order_items)
+            
+            Cart.objects.filter(id__in=books).delete()
+
+            return JsonResponse({'message':order.order_number}, status=201)
+        
+        except transaction.TransactionManagementError:
+            return JsonResponse({'message':'TransactionManagementError'}, status=401)
+        
+        except KeyError:
+            return JsonResponse({'message':'KEY_ERROR'}, status=401)
