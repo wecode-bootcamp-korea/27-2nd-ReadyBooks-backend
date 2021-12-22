@@ -18,6 +18,3 @@ class OrderItemView(View):
         } for item in items]
 
         return JsonResponse({"result":result}, status=200 )
-
-        id__in = [1,2,3,4,5]
-        cart.delete()
