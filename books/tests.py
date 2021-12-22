@@ -153,7 +153,7 @@ class BooksViewTest(TestCase):
                 {
                     "title"      : "해리포터",
                     "thumbnail"  : "images",
-                    "review_avg" : 1.0,
+                    "review_avg" : '4.600000',
                     "authors"    : ["현대영작가"]
                 }
             ]
@@ -170,7 +170,7 @@ class BooksViewTest(TestCase):
                 {
                     "title"      : "해리포터",
                     "thumbnail"  : "images",
-                    "review_avg" : 2.0,
+                    "review_avg" : '4.600000',
                     "authors"    : ["현대영작가"]
                 }
             ]

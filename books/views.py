@@ -40,7 +40,7 @@ class BooksView(View):
         offset   = int(request.GET.get('offset', 0))
         ordering = request.GET.get('ordering', 'created_at')
 
-        books = Book.objects.annotate(review_avg = Avg('review__id')).prefetch_related('authorbook_set__author').order_by(ordering)[offset:limit+offset]
+        books = Book.objects.annotate(review_avg = Avg('review__rating')).prefetch_related('authorbook_set__author').order_by(ordering)[offset:limit+offset]
 
         book_list=[{
             "title"      : book.name,
