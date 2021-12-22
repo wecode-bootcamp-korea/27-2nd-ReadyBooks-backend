@@ -6,22 +6,24 @@ from django.db.models       import Avg
 
 from .models                import Book
 from orders.models          import OrderItem
-from core.decorator         import login_required
+from core.decorator         import login_required, public_authorization
 
 class BookView(View):
-    @login_required
+    @public_authorization
     def get(self, request, book_id):
         try:
             book    = Book.objects.prefetch_related('authorbook_set__author', "review_set",Prefetch("orderitem_set", OrderItem.objects.filter(order__user=request.user))).get(id=book_id)
 
             results={
-                "purchased"  : bool(book.orderitem_set.all()),
-                "name"       : book.name,
-                "price"      : book.price,
-                "description": book.description,
-                "thumbnail"  : book.thumbnail,
-                "average"    : book.review_set.aggregate(avg_rating=Avg('rating')),
-                "authors"    : [author.author.name for author in book.authorbook_set.all()]
+                "purchased"    : bool(book.orderitem_set.all()),
+                "name"         : book.name,
+                "price"        : book.price,
+                "description"  : book.description,
+                "preview_file" : book.preview_file,
+                "file"         : book.file,
+                "thumbnail"    : book.thumbnail,
+                "average"      : book.review_set.aggregate(avg_rating=Avg('rating')),
+                "authors"      : [author.author.name for author in book.authorbook_set.all()]
             }
 
             return JsonResponse({"result":results}, status=200)
