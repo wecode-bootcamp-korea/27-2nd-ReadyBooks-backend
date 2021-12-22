@@ -96,13 +96,15 @@ class BookViewTest(TestCase):
         self.assertEqual(response.json(), {
             "result": 
                 {
-                    "purchased"  : False,
-                    "name"       : "책1",
-                    "price"      : "10000.00",
-                    "description": "설명1",
-                    "thumbnail"  : "thumbnail1",
-                    'average':   {'avg_rating': '5.000000'},
-                    "authors"    : [
+                    "purchased"    : False,
+                    "name"         : "책1",
+                    "price"        : "10000.00",
+                    "description"  : "설명1",
+                    "preview_file" : "url",
+                    "file"         : "url",
+                    "thumbnail"    : "thumbnail1",
+                    'average'      :   {'avg_rating': '5.000000'},
+                    "authors"      : [
                         "작가1"
                     ],
                 }
