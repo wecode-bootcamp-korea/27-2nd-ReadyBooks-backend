@@ -12,7 +12,7 @@ from core.decorator import login_required, public_authorization
 class OrderItemView(View):
     @public_authorization
     def get(self, request):
-        items = OrderItem.objects.filter(order__user=request.user).prefetch_related("book__authorbook_set__author").order_by("-created_at")[0:10]
+        items = OrderItem.objects.filter(order__user=request.user).prefetch_related("book__authorbook_set__author").order_by("-created_at")[0:3]
         result = [{
             "order_id"   : item.id,
             "order_book" : { 

@@ -34,7 +34,6 @@ class BookView(View):
 
 
 class BooksView(View):
-    @login_required
     def get(self, request):
         limit    = int(request.GET.get('limit', 50))
         offset   = int(request.GET.get('offset', 0))
