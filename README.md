@@ -7,6 +7,7 @@
 ## 개발 인원 및 기간
 
 - 개발기간: 2021/12/13~2021/12/23
+![제목_없는_아트워크](https://user-images.githubusercontent.com/90754590/147329825-f8c2f58e-19df-460c-a229-836b118c3e3c.jpg)
 
 
 
@@ -62,6 +63,7 @@
 [!ReadyBooks](https://youtu.be/83JF9irjIb4)
 
 ### ERD
+<img width="1167" alt="스크린샷 2021-12-24 오후 4 19 05" src="https://user-images.githubusercontent.com/90754590/147329813-37968a46-5284-4e68-b0c9-c00c6130cb64.png">
 
 
 ### Reference
