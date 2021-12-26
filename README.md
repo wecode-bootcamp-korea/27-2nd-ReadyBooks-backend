@@ -4,12 +4,15 @@
 
 함께 책 읽을 준비 되셨나요?
 
+## 데모영상 (이미지 클릭)
+
+[![ReadyBooks](<https://media.vlpt.us/images/tjdgus0528/post/f79132e6-183d-41f5-9078-ebff9a5068cb/ezgif.com-gif-maker%20(1).gif>)](https://youtu.be/83JF9irjIb4)
+
 ## 개발 인원 및 기간
 
 - 개발기간: 2021/12/13~2021/12/23
-![제목_없는_아트워크](https://user-images.githubusercontent.com/90754590/147329825-f8c2f58e-19df-460c-a229-836b118c3e3c.jpg)
 
-
+<img src='https://media.vlpt.us/images/tjdgus0528/post/0c7db5d1-cc6a-4276-957b-ef74c3e2584b/ready.jpg' width="754" alt='단체사진'/>
 
 - Frontend :
   - 홍유진 [github link](https://github.com/howyoujini)
